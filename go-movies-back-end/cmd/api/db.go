@@ -11,7 +11,6 @@ import (
 
 func openDB(dsn string) (*sql.DB, error) {
 	db, err := sql.Open("pgx", dsn)
-
 	if err != nil {
 		return nil, err
 	}
@@ -30,6 +29,6 @@ func (app *application) connectToDB() (*sql.DB, error) {
 		return nil, err
 	}
 
-	log.Println("Connecting to Postgres")
+	log.Println("Connected to Postgres!")
 	return connection, nil
 }

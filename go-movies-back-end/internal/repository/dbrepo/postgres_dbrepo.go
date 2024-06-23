@@ -8,18 +8,21 @@ import (
 )
 
 type PostgresDBRepo struct {
-	B *sql.DB
+	DB *sql.DB
 }
 
-// if over 3 second it will cancel request from db
 const dbTimeout = time.Second * 3
+
+func (m *PostgresDBRepo) Connection() *sql.DB {
+	return m.DB
+}
 
 func (m *PostgresDBRepo) AllMovies() ([]*models.Movie, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
 	defer cancel()
 
 	query := `
-		select 
+		select
 			id, title, release_date, runtime,
 			mpaa_rating, description, coalesce(image, ''),
 			created_at, updated_at
@@ -28,11 +31,11 @@ func (m *PostgresDBRepo) AllMovies() ([]*models.Movie, error) {
 		order by
 			title
 	`
-	rows, err := m.B.QueryContext(ctx, query)
+
+	rows, err := m.DB.QueryContext(ctx, query)
 	if err != nil {
 		return nil, err
 	}
-
 	defer rows.Close()
 
 	var movies []*models.Movie
