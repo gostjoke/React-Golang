@@ -1,8 +1,10 @@
-const GraphQL = () =>{
-    return (
+
+const GraphQL = () => {
+
+    return(
         <div>
             <h2>GraphQL</h2>
-            <hr/>
+            <hr />
         </div>
     )
 }

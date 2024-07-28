@@ -24,6 +24,7 @@ func (app *application) writeJSON(w http.ResponseWriter, status int, data interf
 			w.Header()[key] = value
 		}
 	}
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
 	_, err = w.Write(out)
@@ -43,14 +44,13 @@ func (app *application) readJSON(w http.ResponseWriter, r *http.Request, data in
 	dec.DisallowUnknownFields()
 
 	err := dec.Decode(data)
-
 	if err != nil {
 		return err
 	}
 
 	err = dec.Decode(&struct{}{})
 	if err != io.EOF {
-		return errors.New("body must only contain a single json value")
+		return errors.New("body must only contain a single JSON value")
 	}
 
 	return nil

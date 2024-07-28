@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"log"
 	"net/http"
 )
 
@@ -34,7 +33,7 @@ func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
 	// read json payload
 	var requestPayload struct {
 		Email    string `json:"email"`
-		Password string `json:""password`
+		Password string `json:"password"`
 	}
 
 	err := app.readJSON(w, r, &requestPayload)
@@ -49,6 +48,7 @@ func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
 		app.errorJSON(w, errors.New("invalid credentials"), http.StatusBadRequest)
 		return
 	}
+
 	// check password
 	valid, err := user.PasswordMatches(requestPayload.Password)
 	if err != nil || !valid {
@@ -70,11 +70,8 @@ func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Println(tokens.Token)
 	refreshCookie := app.auth.GetRefreshCookie(tokens.RefreshToken)
 	http.SetCookie(w, refreshCookie)
 
 	app.writeJSON(w, http.StatusAccepted, tokens)
-
-	// w.Write([]byte(tokens.Token))
 }

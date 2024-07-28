@@ -16,7 +16,7 @@ type application struct {
 	DSN          string
 	Domain       string
 	DB           repository.DatabaseRepo
-	auth         Auth // jwt token
+	auth         Auth
 	JWTSecret    string
 	JWTIssuer    string
 	JWTAudience  string
@@ -34,7 +34,6 @@ func main() {
 	flag.StringVar(&app.JWTAudience, "jwt-audience", "example.com", "signing audience")
 	flag.StringVar(&app.CookieDomain, "cookie-domain", "localhost", "cookie domain")
 	flag.StringVar(&app.Domain, "domain", "example.com", "domain")
-
 	flag.Parse()
 
 	// connect to the database
@@ -46,14 +45,14 @@ func main() {
 	defer app.DB.Connection().Close()
 
 	app.auth = Auth{
-		Issuer:        app.JWTIssuer,
-		Audience:      app.JWTAudience,
-		Secret:        app.JWTSecret,
-		TokenExpiry:   time.Minute * 15,
+		Issuer: app.JWTIssuer,
+		Audience: app.JWTAudience,
+		Secret: app.JWTSecret,
+		TokenExpiry: time.Minute * 15,
 		RefreshExpiry: time.Hour * 24,
-		CookiePath:    "/",
-		CookieName:    "__Host-refresh_token",
-		CookieDomain:  app.CookieDomain,
+		CookiePath: "/",
+		CookieName: "__Host-refresh_token",
+		CookieDomain: app.CookieDomain,
 	}
 
 	log.Println("Starting application on port", port)

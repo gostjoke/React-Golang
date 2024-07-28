@@ -1,11 +1,12 @@
-const EditMovie = () =>{
 
-    return (
+const EditMovie = () => {
+
+    return(
         <div>
             <h2>Edit Movie</h2>
-            <hr/>
+            <hr />
         </div>
     )
 }
 
-export default EditMovie ;
+export default EditMovie;
